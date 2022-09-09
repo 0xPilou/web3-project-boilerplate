@@ -53,6 +53,9 @@ const config: HardhatUserConfig = {
       default: 0,
     },
   },
+  paths: {
+    deployments: "../../packages/web3-config/deployments",
+  },
   gasReporter: {
     enabled: true,
     currency: "USD",
