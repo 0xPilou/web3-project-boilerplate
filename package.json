@@ -13,7 +13,6 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "eslint-config-custom": "*",
     "prettier": "latest",
     "turbo": "latest"
   },
@@ -22,7 +21,6 @@
   },
   "dependencies": {
     "dotenv": "^16.0.2",
-    "ethers": "^5.7.0",
     "typescript": "^4.8.3"
   },
   "packageManager": "yarn@1.22.18"
