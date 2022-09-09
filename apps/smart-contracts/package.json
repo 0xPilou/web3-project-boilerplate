@@ -12,13 +12,16 @@
     "@nomiclabs/hardhat-ethers": "^2.0.5",
     "@nomiclabs/hardhat-etherscan": "^3.0.3",
     "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "@typechain/hardhat": "^6.1.2",
+    "@typechain/truffle-v5": "^8.0.1",
     "chai": "^4.3.6",
+    "chai-as-promised": "^7.1.1",
     "ethereum-waffle": "^3.4.4",
-    "hardhat": "^2.9.3"
+    "hardhat": "^2.9.3",
+    "hardhat-gas-reporter": "^1.0.9",
+    "typechain": "^8.1.0"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.6.0",
-    "dotenv": "^16.0.1",
-    "hardhat-gas-reporter": "^1.0.8"
+    "@openzeppelin/contracts": "^4.6.0"
   }
 }
