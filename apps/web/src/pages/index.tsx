@@ -1,4 +1,4 @@
-import { Button, ChainInfo } from "ui";
+import { ChainInfo } from "ui";
 import Header from "../components/Header";
 import { useAccount, useNetwork } from "wagmi";
 import { useQuery } from "react-query";
