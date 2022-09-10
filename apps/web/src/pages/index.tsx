@@ -6,9 +6,22 @@ import {
   useContractWrite,
   useNetwork,
 } from "wagmi";
+import { useQuery } from "react-query";
+import axios from "axios";
 
 export default function Web() {
   const { address, isDisconnected, isConnecting } = useAccount();
+
+  const { isLoading: isFetchingPrice, data: price = [] } = useQuery(
+    ["price"],
+    async () => {
+      const res = await axios.get(`/api/get-price?currency=ethereum`);
+      console.log(res.data);
+      return res.data || [];
+    }
+  );
+
+  if (isFetchingPrice) return <div>Fetching Price...</div>;
 
   return (
     <>
@@ -30,6 +43,9 @@ export default function Web() {
         <>
           <h1>My App Name</h1>
           <Button />
+          <div>
+            <h2>ETH Price : {price} $</h2>
+          </div>
         </>
       )}
     </>
