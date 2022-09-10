@@ -1,16 +1,12 @@
-import { Button } from "ui";
+import { Button, ChainInfo } from "ui";
 import Header from "../components/Header";
-import {
-  useAccount,
-  useContractRead,
-  useContractWrite,
-  useNetwork,
-} from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import { useQuery } from "react-query";
 import axios from "axios";
 
 export default function Web() {
-  const { address, isDisconnected, isConnecting } = useAccount();
+  const { address, isDisconnected } = useAccount();
+  const { chain } = useNetwork();
 
   const { isLoading: isFetchingPrice, data: price = [] } = useQuery(
     ["price"],
@@ -39,12 +35,12 @@ export default function Web() {
         </div>
       )}
 
-      {!isDisconnected && (
+      {!isDisconnected && chain && address && (
         <>
           <h1>My App Name</h1>
-          <Button />
+          <ChainInfo chain={chain.name} address={address} />
           <div>
-            <h2>ETH Price : {price} $</h2>
+            <h3>ETH Price : {price} $</h3>
           </div>
         </>
       )}
