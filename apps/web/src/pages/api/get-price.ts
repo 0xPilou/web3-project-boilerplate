@@ -11,7 +11,6 @@ const handler = async (req, res) => {
     const result = await axios.get(
       `https://api.coingecko.com/api/v3/simple/price?ids=${req.query.currency}&vs_currencies=usd`
     );
-    console.log(result.data.ethereum.usd);
 
     return res.status(200).send(result.data.ethereum.usd);
   } catch (e) {

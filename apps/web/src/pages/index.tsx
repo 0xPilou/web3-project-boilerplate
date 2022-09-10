@@ -12,12 +12,11 @@ export default function Web() {
     ["price"],
     async () => {
       const res = await axios.get(`/api/get-price?currency=ethereum`);
-      console.log(res.data);
       return res.data || [];
     }
   );
 
-  if (isFetchingPrice) return <div>Fetching Price...</div>;
+  if (isFetchingPrice) return <div></div>;
 
   return (
     <>
@@ -39,8 +38,12 @@ export default function Web() {
         <>
           <h1>My App Name</h1>
           <ChainInfo chain={chain.name} address={address} />
+
           <div>
-            <h3>ETH Price : {price} $</h3>
+            <h3>
+              ETH Price :{" "}
+              {isFetchingPrice ? <div>Fetching Price...</div> : price} $
+            </h3>
           </div>
         </>
       )}
