@@ -25,8 +25,12 @@ describe("Drop V1 Unit Tests", function () {
   });
 
   describe("METHOD : SetMessage", async () => {
-    it("should be able to mint an NFT", async () => {
+    it("should set a new message", async () => {
+      expect(await contract.message()).to.be.eq("Hello World");
 
+      await contract.setMessage("Hello");
+
+      expect(await contract.message()).to.be.eq("Hello");
     });
   });
 });
