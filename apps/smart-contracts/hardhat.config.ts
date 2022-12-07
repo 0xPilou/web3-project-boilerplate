@@ -2,10 +2,13 @@ import "@nomiclabs/hardhat-ethers";
 import "@nomiclabs/hardhat-etherscan";
 import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
+import "@openzeppelin/hardhat-upgrades";
+import "hardhat-deploy-ethers";
+import "hardhat-gas-reporter";
+import "hardhat-deploy";
 import "hardhat-abi-exporter";
 import "hardhat-contract-sizer";
-import "hardhat-deploy";
-import "hardhat-gas-reporter";
+import "solidity-coverage";
 
 import * as dotenv from "dotenv";
 import { HardhatUserConfig, task } from "hardhat/config";
@@ -21,11 +24,21 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 });
 
 const ALCHEMY_KEY = process.env.ALCHEMY_KEY;
-const RINKEBY_ALCHEMY_KEY = process.env.RINKEBY_ALCHEMY_KEY;
+const GOERLI_ALCHEMY_KEY = process.env.GOERLI_ALCHEMY_KEY;
+const OPTIMISM_GOERLI_ALCHEMY_KEY = process.env.OPTIMISM_GOERLI_ALCHEMY_KEY;
+const OPTIMISM_ALCHEMY_KEY = process.env.OPTIMISM_MAINNET_ALCHEMY_KEY;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.4",
+  solidity: {
+    version: "0.8.16",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 10,
+      },
+    },
+  },
   defaultNetwork: "hardhat",
 
   networks: {
@@ -35,17 +48,31 @@ const config: HardhatUserConfig = {
         interval: 5000,
       },
     },
-    mainnet: {
-      url: `https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}`,
-      accounts: [`${PRIVATE_KEY}`],
-    },
-    rinkeby: {
-      url: `https://eth-rinkeby.alchemyapi.io/v2/${RINKEBY_ALCHEMY_KEY}`,
-      accounts: [`${PRIVATE_KEY}`],
-    },
     localhost: {
       url: "http://127.0.0.1:8545",
       saveDeployments: true,
+    },
+    mainnet: {
+      url: `https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}`,
+      accounts: [`${PRIVATE_KEY}`],
+      deploy: ["deploy/mainnet"],
+    },
+    optimism: {
+      chainId: 10,
+      url: `https://opt-mainnet.g.alchemy.com/v2/${OPTIMISM_ALCHEMY_KEY}`,
+      accounts: [`${PRIVATE_KEY}`],
+      deploy: ["deploy/optimism"],
+    },
+    goerli: {
+      url: `https://eth-goerli.g.alchemy.com/v2/${GOERLI_ALCHEMY_KEY}`,
+      accounts: [`${PRIVATE_KEY}`],
+      deploy: ["deploy/goerli"],
+    },
+    optimismGoerli: {
+      chainId: 420,
+      url: `https://opt-goerli.g.alchemy.com/v2/${OPTIMISM_GOERLI_ALCHEMY_KEY}`,
+      accounts: [`${PRIVATE_KEY}`],
+      deploy: ["deploy/optimismGoerli"],
     },
   },
   namedAccounts: {
@@ -61,25 +88,49 @@ const config: HardhatUserConfig = {
     currency: "USD",
   },
   etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY,
+    apiKey: {
+      mainnet: `${process.env.ETHERSCAN_API_KEY}`,
+      optimism: `${process.env.OPTIMISM_ETHERSCAN_API_KEY}`,
+      goerli: `${process.env.ETHERSCAN_API_KEY}`,
+      optimismGoerli: `${process.env.OPTIMISM_ETHERSCAN_API_KEY}`,
+    },
+    customChains: [
+      {
+        network: "optimismGoerli",
+        chainId: 420,
+        urls: {
+          apiURL: "https://api-goerli-optimism.etherscan.io/api",
+          browserURL: "https://goerli-optimism.etherscan.io/",
+        },
+      },
+      {
+        network: "optimism",
+        chainId: 10,
+        urls: {
+          apiURL: "https://api-optimistic.etherscan.io/api",
+          browserURL: "https://optimistic.etherscan.io/",
+        },
+      },
+    ],
   },
   typechain: {
     outDir: "../../packages/web3-config/typechain",
     target: "ethers-v5",
     alwaysGenerateOverloads: true,
   },
+
   abiExporter: {
     path: "./abi",
     clear: true,
-    flat: true,
     spacing: 2,
     runOnCompile: true,
   },
-  contractSizer: {
-    alphaSort: true,
-    runOnCompile: true,
-    strict: true,
-  },
+
+  // contractSizer: {
+  //   alphaSort: true,
+  //   runOnCompile: true,
+  //   strict: true,
+  // },
 };
 
 export default config;
